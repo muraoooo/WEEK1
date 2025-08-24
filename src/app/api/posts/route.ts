@@ -11,7 +11,13 @@ export async function GET() {
       .sort({ createdAt: -1 })
       .toArray();
     
-    return NextResponse.json(posts);
+    // Convert ObjectId to string for JSON serialization
+    const serializedPosts = posts.map(post => ({
+      ...post,
+      _id: post._id?.toString()
+    }));
+    
+    return NextResponse.json(serializedPosts);
   } catch (error) {
     console.error('Error fetching posts:', error);
     return NextResponse.json(

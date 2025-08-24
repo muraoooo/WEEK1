@@ -1,5 +1,7 @@
+import { ObjectId } from 'mongodb';
+
 export interface Post {
-  _id?: string;
+  _id?: ObjectId | string;
   title: string;
   content: string;
   author: string;

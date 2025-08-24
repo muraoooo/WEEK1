@@ -5,13 +5,14 @@ import { UpdatePostInput, Post } from '@/types/post';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const db = await getDatabase();
     const post = await db
       .collection<Post>('posts')
-      .findOne({ _id: new ObjectId(params.id) });
+      .findOne({ _id: new ObjectId(id) });
 
     if (!post) {
       return NextResponse.json(
@@ -20,7 +21,10 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(post);
+    return NextResponse.json({
+      ...post,
+      _id: post._id?.toString()
+    });
   } catch (error) {
     console.error('Error fetching post:', error);
     return NextResponse.json(
@@ -32,9 +36,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body: UpdatePostInput = await request.json();
     const db = await getDatabase();
     
@@ -46,7 +51,7 @@ export async function PUT(
     const result = await db
       .collection<Post>('posts')
       .findOneAndUpdate(
-        { _id: new ObjectId(params.id) },
+        { _id: new ObjectId(id) },
         { $set: updateData },
         { returnDocument: 'after' }
       );
@@ -58,7 +63,10 @@ export async function PUT(
       );
     }
 
-    return NextResponse.json(result);
+    return NextResponse.json({
+      ...result,
+      _id: result?._id?.toString()
+    });
   } catch (error) {
     console.error('Error updating post:', error);
     return NextResponse.json(
@@ -70,13 +78,14 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const db = await getDatabase();
     const result = await db
       .collection<Post>('posts')
-      .deleteOne({ _id: new ObjectId(params.id) });
+      .deleteOne({ _id: new ObjectId(id) });
 
     if (result.deletedCount === 0) {
       return NextResponse.json(

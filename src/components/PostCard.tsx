@@ -26,14 +26,14 @@ export default function PostCard({ post, onEdit, onDelete }: PostCardProps) {
         </div>
         <div className="flex gap-2 ml-4">
           <button 
-            onClick={() => onEdit(post._id!)}
+            onClick={() => onEdit(post._id!.toString())}
             className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors"
             aria-label="edit"
           >
             編集
           </button>
           <button 
-            onClick={() => onDelete(post._id!)}
+            onClick={() => onDelete(post._id!.toString())}
             className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors"
             aria-label="delete"
           >

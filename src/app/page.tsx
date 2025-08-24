@@ -98,7 +98,7 @@ export default function Home() {
         ) : (
           posts.map((post) => (
             <PostCard
-              key={post._id}
+              key={post._id?.toString()}
               post={post}
               onEdit={handleEditClick}
               onDelete={(id) => setDeleteConfirmId(id)}

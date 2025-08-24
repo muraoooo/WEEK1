@@ -33,7 +33,7 @@ export default function PostForm({ onSubmit, initialData, isEdit = false }: Post
       if (!isEdit) {
         setFormData({ title: '', content: '', author: '' });
       }
-    } catch (err) {
+    } catch {
       setError('投稿の送信に失敗しました');
     } finally {
       setIsSubmitting(false);
